@@ -41,7 +41,8 @@ table td{
 	width:300px;
 }
 
-#input_mail_address{
+#input_mail_address, 
+#input_telephone{
 	width:300px;
 }
 
@@ -61,6 +62,15 @@ table td{
 					<td>
 						<p class="message" id="message_mail_address"></p>
 						<input type="email" id="input_mail_address" maxlength="255" placeholder="入力例:example@mail.com">
+					</td>
+				</tr>
+				<tr>
+					<th>
+						電話番号
+					</th>
+					<td>
+						<p class="message" id="message_telephone"></p>
+						<input type="text" id="input_telephone" maxlength="15" placeholder="入力例:000-0000-0000">
 					</td>
 				</tr>
 			</table>
@@ -95,7 +105,15 @@ table td{
 		}, 
 		funcExecuteConfirmInput = () => {
 			const 
-			configs = {
+			eleMessageMailAddress = $('#message_mail_address'), 
+			eleInputMailAddress = $('#input_mail_address'), 
+			eleMessageTelephone = $('#message_telephone'), 
+			eleInputTelephone = $('#input_telephone');
+			let 
+			flagInput = true, 
+			
+			//メールアドレス
+			prototypeConfirmInput = new $.confirmInput({
 				funcConfirmInputStartCallback:() => {
 					eleMessageMailAddress
 					.empty()
@@ -110,18 +128,39 @@ table td{
 					.html(message)
 					.show();
 				} 
-			}, 
-			eleMessageMailAddress = $('#message_mail_address'), 
-			eleInputMailAddress = $('#input_mail_address');
-			let 
-			flagInput = true, 
-			prototypeConfirmInput = new $.confirmInput(configs);
+			});
 			prototypeConfirmInput.setValue(eleInputMailAddress.val());
 			prototypeConfirmInput.setEmpty(true);
 			prototypeConfirmInput.setLimitBytes(255);
 			prototypeConfirmInput.setPattern(/^[\da-zA-Z]+[\w\-\.]*@[\w\-]+\.[\w\-\.]+$/);
 			if(prototypeConfirmInput.execute() === false)
 			flagInput = false;
+			
+			//電話番号
+			prototypeConfirmInput = new $.confirmInput({
+				funcConfirmInputStartCallback:() => {
+					eleMessageTelephone
+					.empty()
+					.hide();
+				}, 
+				funcConfirmInputEndCallback:(
+					result, 
+					message 
+				) => {
+					if(result === false)
+					eleMessageTelephone
+					.html(message)
+					.show();
+				} 
+			});
+			prototypeConfirmInput.setValue(eleInputTelephone.val());
+			prototypeConfirmInput.setEmpty(true);
+			prototypeConfirmInput.setLimitBytes(15);
+			prototypeConfirmInput.setPattern(/^0\d{1,4}-\d{1,4}-\d{3,4}$/);
+			if(prototypeConfirmInput.execute() === false)
+			flagInput = false;
+			
+			//確認結果
 			if(flagInput)
 			alert('入力内容に問題ありません。');
 		};
