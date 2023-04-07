@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>jQueryプロトタイプ - 入力内容確認</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" href="./css/default.css">
+<style>
+.wrapper{
+	width:500px;
+	margin:0 auto 30px;
+	text-align:left;
+}
+
+.message{
+	color:#F00;
+	display:none;
+}
+
+table{
+	width:100%;
+	margin-bottom:10px;
+	border-top:solid #000 1px;
+	border-left:solid #000 1px;
+}
+
+table th, 
+table td{
+	border-right:solid #000 1px;
+	border-bottom:solid #000 1px;
+}
+
+table th{
+	text-align:center;
+}
+
+table td{
+	width:300px;
+}
+
+#input_mail_address{
+	width:300px;
+}
+
+#confirm_execute_trigger{
+	cursor:pointer;
+}
+</style>
+</head>
+<body>
+	<section class="wrapper">
+		<form name="form">
+			<table cellpadding="5" cellspacing="0" border="0">
+				<tr>
+					<th>
+						メールアドレス
+					</th>
+					<td>
+						<p class="message" id="message_mail_address"></p>
+						<input type="email" id="input_mail_address" maxlength="255" placeholder="入力例:example@mail.com">
+					</td>
+				</tr>
+			</table>
+			<input type="button" value="入力内容確認" id="confirm_execute_trigger">
+		</form>
+	</section>
+	<!-- lib/jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	
+	<!-- plugin -->
+	<script src="./prototype/jquery.confirmInput.js"></script>
+	
+	<script>
+(function($){
+	$(document).ready(function(){
+		const 
+		funcAddEventLister = () => {
+			const 
+			eleForm = $('form[name="form"]'), 
+			eleConfirmExecuteTrigger = $('#confirm_execute_trigger');
+			eleForm.on({
+				'keypress':(e) => {
+					if(e.keyCode !== 13)
+					return true;
+					funcExecuteConfirmInput();
+					return false;
+				} 
+			});
+			eleConfirmExecuteTrigger.on({
+				'click':funcExecuteConfirmInput 
+			});
+		}, 
+		funcExecuteConfirmInput = () => {
+			const 
+			configs = {
+				funcConfirmInputStartCallback:() => {
+					eleMessageMailAddress
+					.empty()
+					.hide();
+				}, 
+				funcConfirmInputEndCallback:(
+					result, 
+					message 
+				) => {
+					if(result === false)
+					eleMessageMailAddress
+					.html(message)
+					.show();
+				} 
+			}, 
+			eleMessageMailAddress = $('#message_mail_address'), 
+			eleInputMailAddress = $('#input_mail_address');
+			let 
+			flagInput = true, 
+			prototypeConfirmInput = new $.confirmInput(configs);
+			prototypeConfirmInput.setValue(eleInputMailAddress.val());
+			prototypeConfirmInput.setEmpty(true);
+			prototypeConfirmInput.setLimitBytes(255);
+			prototypeConfirmInput.setPattern(/^[\da-zA-Z]+[\w\-\.]*@[\w\-]+\.[\w\-\.]+$/);
+			if(prototypeConfirmInput.execute() === false)
+			flagInput = false;
+			if(flagInput)
+			alert('入力内容に問題ありません。');
+		};
+		funcAddEventLister();
+	});
+})(jQuery);
+	</script>
+</body>
+</html>
