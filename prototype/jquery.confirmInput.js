@@ -1,4 +1,34 @@
 /*----------------------------- confirm_input -----------------------------*/
+/***************************************************************************
+**		//インスタンス生成用メソッド　※引数にてオプション指定
+**		prototypeConfirmInput = new $.confirmInput({
+**			//エラー発生時のメッセージ
+**			message:{
+**				error:'入力内容が不正です。', 
+**				empty:'未入力です。', 
+**				list:'リストの内容が不正です。', 
+**				limitBytes:'入力上限バイト数を超えてます。', 
+**				intMin:'最小値未満です。', 
+**				intMax:'最大値を超えてます。' 
+**			}, 
+**			//検証開始時実行用コールバック関数
+**			funcConfirmInputStartCallback:() => {}, 
+**			//検証完了時実行用コールバック関数
+**			funcConfirmInputEndCallback:(
+**				result, 		//検証結果　true => 正, false => 誤 
+**				message 		//検証結果のメッセージ
+**			) => {} 
+**		});
+**		prototypeConfirmInput.setValue('-9.99');				//検証対象の値
+**		prototypeConfirmInput.setEmpty(false);					//必須フラグ　true => 必須, false => 任意 
+**		prototypeConfirmInput.setNumberMin(3);					//数値の最小数　小数点以下入力可
+**		prototypeConfirmInput.setNumberMax(999);				//数値の最大値　小数点以下入力可
+**		prototypeConfirmInput.setWhiteList([3]);				//ホワイトリスト
+**		prototypeConfirmInput.setBlackList([6]);				//ブラックリスト
+**		prototypeConfirmInput.setLimitBytes(2);					//入力上限バイト数
+**		prototypeConfirmInput.setPattern(eval('/^[0-9]+$/'));	//正規表現
+**		prototypeConfirmInput.execute();						//検証実行用メソッド　検証結果true => 正, false => 誤 
+***************************************************************************/
 
 (function($){
 	const 
