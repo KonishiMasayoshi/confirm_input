@@ -42,7 +42,8 @@ table td{
 }
 
 #input_mail_address, 
-#input_telephone{
+#input_telephone, 
+#input_age{
 	width:300px;
 }
 
@@ -71,6 +72,15 @@ table td{
 					<td>
 						<p class="message" id="message_telephone"></p>
 						<input type="text" id="input_telephone" maxlength="15" placeholder="入力例:000-0000-0000">
+					</td>
+				</tr>
+				<tr>
+					<th>
+						年齢
+					</th>
+					<td>
+						<p class="message" id="message_age"></p>
+						<input type="number" id="input_age" maxlength="3" placeholder="入力例:20" min="1" max="130">
 					</td>
 				</tr>
 			</table>
@@ -108,7 +118,9 @@ table td{
 			eleMessageMailAddress = $('#message_mail_address'), 
 			eleInputMailAddress = $('#input_mail_address'), 
 			eleMessageTelephone = $('#message_telephone'), 
-			eleInputTelephone = $('#input_telephone');
+			eleInputTelephone = $('#input_telephone'), 
+			eleMessageAge = $('#message_age'), 
+			eleInputAge = $('#input_age');
 			let 
 			flagInput = true, 
 			
@@ -157,6 +169,32 @@ table td{
 			prototypeConfirmInput.setEmpty(true);
 			prototypeConfirmInput.setLimitBytes(15);
 			prototypeConfirmInput.setPattern(/^0\d{1,4}-\d{1,4}-\d{3,4}$/);
+			if(prototypeConfirmInput.execute() === false)
+			flagInput = false;
+			
+			//年齢
+			prototypeConfirmInput = new $.confirmInput({
+				funcConfirmInputStartCallback:() => {
+					eleMessageAge
+					.empty()
+					.hide();
+				}, 
+				funcConfirmInputEndCallback:(
+					result, 
+					message 
+				) => {
+					if(result === false)
+					eleMessageAge
+					.html(message)
+					.show();
+				} 
+			});
+			prototypeConfirmInput.setValue(eleInputAge.val());
+			prototypeConfirmInput.setEmpty(true);
+			prototypeConfirmInput.setLimitBytes(3);
+			prototypeConfirmInput.setPattern(/^[0-9]+$/);
+			prototypeConfirmInput.setNumberMin(1);
+			prototypeConfirmInput.setNumberMax(130);
 			if(prototypeConfirmInput.execute() === false)
 			flagInput = false;
 			
